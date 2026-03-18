@@ -1,0 +1,21 @@
+
+export const SOLANA_METAPLEX_TOKEN = 'METAewgxyPbgwsseH8T16a39CQ5VyVxZi9zXiDPY18m'
+export const SOLANA_COMPUTE_BUDGET= 'ComputeBudget111111111111111111111111111111'
+export const SOLANA_JUPITER_AGGREGATOR= 'JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4'
+export const SOLANA_USDC_MINT= 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
+export const SOLANA_PUMP_FUN_PROGRAM_ID= '6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P'
+export const SOLANA_RAYDIUM_POOL_V4_PROGRAM_ID= '675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8'
+export const SOLANA_MINT = 'So11111111111111111111111111111111111111112'
+export const SOLANA_PUMP_FUN_ACCOUNT= 'Ce6TQqeHC9p8KetsN6JsjHK7UTZk7nasjjnr7XxXp9F1'
+export const SOLANA_TOKEN_PROGRAM= 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'
+export const SOLANA_MAINNET_RPC_URL= 'https://api.mainnet-beta.solana.com'
+export const SOLANA_MAINNET_WS_ENDPOINT= 'wss://api.mainnet-beta.solana.com'
+export const SOLANA_FALLBACK_RPC_URL= 'https://api.mainnet-beta.solana.com'
+export const SOLANA_FALLBACK_WS_ENDPOINT= 'wss://api.mainnet-beta.solana.com'
+export const SOLANA_SOL_DECIMALS= '9'
+export const SOLANA_SOL_LAMPORTS= '1000000000'
+export const JSON_RPC_VERSION = '2.0' as const;
+export const DEFAULT_ENV_PATH = './.env';
+
+
+

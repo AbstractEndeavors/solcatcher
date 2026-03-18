@@ -1,0 +1,72 @@
+{
+  "compilerOptions": {
+    "types": ["node"],
+    "target": "es2022",
+    "module": "NodeNext",
+    "noImplicitAny": false,
+    "moduleResolution": "NodeNext",
+    "declaration": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "emitDeclarationOnly": false,
+    "verbatimModuleSyntax": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@repositories/*": [
+        "db/repositories/repos/*"
+      ],
+      "@rabbit": [
+        "rabbit_utils/index.ts"
+      ],
+      "@imports": [
+        "imports/index.ts"
+      ],
+      "@db": [
+        "db/index.ts"
+      ],
+      
+      "@rateLimiter":[
+        "servers/fetcher/index.ts"
+      ],
+      "@FetchUtils/*":[
+        "servers/fetcher/*"
+      ],
+      "@pipeline":[
+        "pipeline/src/index.js"
+      ],
+      "@Pipeline/*":[
+        "pipeline/*"
+      ],
+      "@ts-server":[
+        "servers/ts/index.ts"
+      ],
+      "@limiter-server":[
+        "servers/limiter/index.ts"
+      ],
+      "@repoServices":[
+        "db/index.ts"
+      ],
+      "@Decoding/*":[
+        "imports/decoding/*"
+      ],
+      "@decoding":[
+        "imports/decoding/index.ts"
+      ]
+    },
+    "allowSyntheticDefaultImports": true,
+    "outDir": "./dist",
+    "strict": true
+  },
+  "include": [
+    "src"
+  ],
+"exclude": [
+  "**/backups/**",
+  "**/examples/**",
+  "**/docs/**",
+  "**/old/**",
+  "node_modules",
+  "dist"
+]
+}
+

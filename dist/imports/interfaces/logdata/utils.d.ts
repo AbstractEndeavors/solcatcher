@@ -1,0 +1,11 @@
+import { type Base64String } from './imports.js';
+import type { RepoResult } from './schemas.js';
+export declare function normalizeLogId(input: unknown): number | null;
+export declare function logsContain(logs: unknown, needle: string): boolean;
+export declare function parsedLogsContain(logs: unknown, needle: string): boolean;
+export declare function flattenInvocations(invocations: any[], out?: any[]): any[];
+export declare function flattenInvocationsWithData(invocations: unknown, out?: any[]): any[];
+export declare function encodeLogsB64(logs: unknown): Base64String;
+export declare function decodeLogsB64(b64: Base64String): unknown;
+export declare function expectOk<T>(r: RepoResult<T>): T;
+export declare function expectRepoValue<T>(result: RepoResult<T>, context?: string): T;

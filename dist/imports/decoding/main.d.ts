@@ -1,0 +1,10 @@
+import { DecoderRegistry } from "./src/index.js";
+import type { RawDecodeOutput } from '@imports';
+import type { Idl } from "@coral-xyz/anchor";
+export declare function getAllIdls(): Idl[];
+export declare function getDecoderRegistry(): DecoderRegistry;
+export declare const DECODER_REGISTRY: DecoderRegistry;
+export declare function initializeRegistry(): any;
+export declare const UNKNOWN_DECODE: RawDecodeOutput;
+export declare function unknownDecode(reason: string, extra?: Record<string, unknown>): RawDecodeOutput;
+export declare function getDecodeFromPayload(payload: any): RawDecodeOutput;

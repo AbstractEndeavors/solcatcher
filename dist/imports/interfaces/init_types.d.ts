@@ -1,0 +1,32 @@
+import type { PublicKey } from "@solana/web3.js";
+export type Pubkey = string | PublicKey | {
+    toBase58(): string;
+};
+export type JsonPrimitive = string | number | boolean | null;
+export type JsonValue = JsonPrimitive | JsonValue[] | {
+    [key: string]: JsonValue;
+};
+export type Id = string;
+export type Address = PublicKey;
+export type AddressLike = PublicKey | string | null | undefined | Address;
+export type Mint = Address;
+export type MintLike = PublicKey | AddressLike | Mint;
+export type IdLike = string | number | null | undefined;
+export type Limit = number;
+export type LimitLike = string | Limit | null | undefined;
+export type Int = number;
+export type IntLike = string | Int | null | undefined;
+export type Float = number;
+export type FloatLike = string | Float | null | undefined;
+export type Bool = boolean;
+export type BoolLike = Bool | null | undefined;
+export type Sig = string;
+export type SigLike = Sig | null | undefined;
+export type StringLike = string | null | undefined;
+export type DateLike = string | Date | null | undefined;
+export type DataLike = any;
+export type Method = string;
+export type MethodLike = StringLike;
+export type BigInt = bigint;
+export type BigIntLike = BigInt | IntLike | StringLike;
+export type BoolValue = boolean | 0 | 1 | "0" | "1" | "true" | "false" | "TRUE" | "FALSE";

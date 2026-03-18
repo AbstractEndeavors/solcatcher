@@ -1,0 +1,1112 @@
+{
+    "address": "pAMMBay6oceH9fJKBRHGP5D4bD4sWpmSwMn52FMfXEA",
+    "metadata": {
+        "name": "pump_amm",
+        "version": "0.1.0",
+        "spec": "0.1.0",
+        "description": "Created with Anchor",
+        "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+    },
+    "instructions": [
+        {
+            "name": "initializeMint",
+            "accounts": [
+                {
+                    "name": "mint",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "rent",
+                    "isMut": false,
+                    "isis_signer": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "decimals",
+                    "type": "u8"
+                },
+                {
+                    "name": "mintAuthority",
+                    "type": "publicKey"
+                },
+                {
+                    "name": "freezeAuthority",
+                    "type": {
+                        "option": "publicKey"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "initializeAccount",
+            "accounts": [
+                {
+                    "name": "account",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "mint",
+                    "isMut": false,
+                    "isis_signer": false
+                },
+                {
+                    "name": "owner",
+                    "isMut": false,
+                    "isis_signer": false
+                },
+                {
+                    "name": "rent",
+                    "isMut": false,
+                    "isis_signer": false
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "initializeMultisig",
+            "accounts": [
+                {
+                    "name": "multisig",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "rent",
+                    "isMut": false,
+                    "isis_signer": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "m",
+                    "type": "u8"
+                }
+            ]
+        },
+        {
+            "name": "transfer",
+            "accounts": [
+                {
+                    "name": "source",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "destination",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "authority",
+                    "isMut": false,
+                    "isis_signer": true
+                }
+            ],
+            "args": [
+                {
+                    "name": "amount",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "approve",
+            "accounts": [
+                {
+                    "name": "source",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "delegate",
+                    "isMut": false,
+                    "isis_signer": false
+                },
+                {
+                    "name": "owner",
+                    "isMut": false,
+                    "isis_signer": true
+                }
+            ],
+            "args": [
+                {
+                    "name": "amount",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "revoke",
+            "accounts": [
+                {
+                    "name": "source",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "owner",
+                    "isMut": false,
+                    "isis_signer": true
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "setAuthority",
+            "accounts": [
+                {
+                    "name": "owned",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "owner",
+                    "isMut": false,
+                    "isis_signer": true
+                },
+                {
+                    "name": "is_signer",
+                    "isMut": false,
+                    "isis_signer": true
+                }
+            ],
+            "args": [
+                {
+                    "name": "authorityType",
+                    "type": {
+                        "defined": "AuthorityType"
+                    }
+                },
+                {
+                    "name": "newAuthority",
+                    "type": {
+                        "option": "publicKey"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "mintTo",
+            "accounts": [
+                {
+                    "name": "mint",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "account",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "owner",
+                    "isMut": false,
+                    "isis_signer": true
+                }
+            ],
+            "args": [
+                {
+                    "name": "amount",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "burn",
+            "accounts": [
+                {
+                    "name": "account",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "mint",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "authority",
+                    "isMut": false,
+                    "isis_signer": true
+                }
+            ],
+            "args": [
+                {
+                    "name": "amount",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "closeAccount",
+            "accounts": [
+                {
+                    "name": "account",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "destination",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "owner",
+                    "isMut": false,
+                    "isis_signer": true
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "freezeAccount",
+            "accounts": [
+                {
+                    "name": "account",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "mint",
+                    "isMut": false,
+                    "isis_signer": false
+                },
+                {
+                    "name": "owner",
+                    "isMut": false,
+                    "isis_signer": true
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "thawAccount",
+            "accounts": [
+                {
+                    "name": "account",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "mint",
+                    "isMut": false,
+                    "isis_signer": false
+                },
+                {
+                    "name": "owner",
+                    "isMut": false,
+                    "isis_signer": true
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "transferChecked",
+            "accounts": [
+                {
+                    "name": "source",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "mint",
+                    "isMut": false,
+                    "isis_signer": false
+                },
+                {
+                    "name": "destination",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "authority",
+                    "isMut": false,
+                    "isis_signer": true
+                }
+            ],
+            "args": [
+                {
+                    "name": "amount",
+                    "type": "u64"
+                },
+                {
+                    "name": "decimals",
+                    "type": "u8"
+                }
+            ]
+        },
+        {
+            "name": "approveChecked",
+            "accounts": [
+                {
+                    "name": "source",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "mint",
+                    "isMut": false,
+                    "isis_signer": false
+                },
+                {
+                    "name": "delegate",
+                    "isMut": false,
+                    "isis_signer": false
+                },
+                {
+                    "name": "owner",
+                    "isMut": false,
+                    "isis_signer": true
+                }
+            ],
+            "args": [
+                {
+                    "name": "amount",
+                    "type": "u64"
+                },
+                {
+                    "name": "decimals",
+                    "type": "u8"
+                }
+            ]
+        },
+        {
+            "name": "mintToChecked",
+            "accounts": [
+                {
+                    "name": "mint",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "account",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "owner",
+                    "isMut": false,
+                    "isis_signer": true
+                }
+            ],
+            "args": [
+                {
+                    "name": "amount",
+                    "type": "u64"
+                },
+                {
+                    "name": "decimals",
+                    "type": "u8"
+                }
+            ]
+        },
+        {
+            "name": "burnChecked",
+            "accounts": [
+                {
+                    "name": "account",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "mint",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "authority",
+                    "isMut": false,
+                    "isis_signer": true
+                }
+            ],
+            "args": [
+                {
+                    "name": "amount",
+                    "type": "u64"
+                },
+                {
+                    "name": "decimals",
+                    "type": "u8"
+                }
+            ]
+        },
+        {
+            "name": "initializeAccount2",
+            "accounts": [
+                {
+                    "name": "account",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "mint",
+                    "isMut": false,
+                    "isis_signer": false
+                },
+                {
+                    "name": "rent",
+                    "isMut": false,
+                    "isis_signer": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "owner",
+                    "type": "publicKey"
+                }
+            ]
+        },
+        {
+            "name": "syncNative",
+            "accounts": [
+                {
+                    "name": "account",
+                    "isMut": true,
+                    "isis_signer": false
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "initializeAccount3",
+            "accounts": [
+                {
+                    "name": "account",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "mint",
+                    "isMut": false,
+                    "isis_signer": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "owner",
+                    "type": "publicKey"
+                }
+            ]
+        },
+        {
+            "name": "initializeMultisig2",
+            "accounts": [
+                {
+                    "name": "multisig",
+                    "isMut": true,
+                    "isis_signer": false
+                },
+                {
+                    "name": "is_signer",
+                    "isMut": false,
+                    "isis_signer": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "m",
+                    "type": "u8"
+                }
+            ]
+        },
+        {
+            "name": "initializeMint2",
+            "accounts": [
+                {
+                    "name": "mint",
+                    "isMut": true,
+                    "isis_signer": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "decimals",
+                    "type": "u8"
+                },
+                {
+                    "name": "mintAuthority",
+                    "type": "publicKey"
+                },
+                {
+                    "name": "freezeAuthority",
+                    "type": {
+                        "option": "publicKey"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "getAccountDataSize",
+            "accounts": [
+                {
+                    "name": "mint",
+                    "isMut": false,
+                    "isis_signer": false
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "initializeImmutableOwner",
+            "accounts": [
+                {
+                    "name": "account",
+                    "isMut": true,
+                    "isis_signer": false
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "amountToUiAmount",
+            "accounts": [
+                {
+                    "name": "mint",
+                    "isMut": false,
+                    "isis_signer": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "amount",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "uiAmountToAmount",
+            "accounts": [
+                {
+                    "name": "mint",
+                    "isMut": false,
+                    "isis_signer": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "uiAmount",
+                    "type": "u64"
+                }
+            ]
+        }
+    ],
+    "accounts": [
+        {
+            "name": "Mint",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "mintAuthority",
+                        "type": {
+                            "option": "publicKey"
+                        }
+                    },
+                    {
+                        "name": "supply",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "decimals",
+                        "type": "u8"
+                    },
+                    {
+                        "name": "isInitialized",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "freezeAuthority",
+                        "type": {
+                            "option": "publicKey"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Account",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "mint",
+                        "type": "publicKey"
+                    },
+                    {
+                        "name": "owner",
+                        "type": "publicKey"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "delegate",
+                        "type": {
+                            "option": "publicKey"
+                        }
+                    },
+                    {
+                        "name": "state",
+                        "type": {
+                            "defined": "AccountState"
+                        }
+                    },
+                    {
+                        "name": "isNative",
+                        "type": {
+                            "option": "u64"
+                        }
+                    },
+                    {
+                        "name": "delegatedAmount",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "closeAuthority",
+                        "type": {
+                            "option": "publicKey"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Multisig",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "m",
+                        "type": "u8"
+                    },
+                    {
+                        "name": "n",
+                        "type": "u8"
+                    },
+                    {
+                        "name": "isInitialized",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "is_signers",
+                        "type": {
+                            "array": [
+                                "publicKey",
+                                11
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "events": [
+        {
+            "name": "AdminSetCoinCreatorEvent",
+            "discriminator": [
+                45,
+                220,
+                93,
+                24,
+                25,
+                97,
+                172,
+                104
+            ]
+        },
+        {
+            "name": "AdminUpdateTokenIncentivesEvent",
+            "discriminator": [
+                147,
+                250,
+                108,
+                120,
+                247,
+                29,
+                67,
+                222
+            ]
+        },
+        {
+            "name": "BuyEvent",
+            "discriminator": [
+                103,
+                244,
+                82,
+                31,
+                44,
+                245,
+                119,
+                119
+            ]
+        },
+        {
+            "name": "ClaimTokenIncentivesEvent",
+            "discriminator": [
+                79,
+                172,
+                246,
+                49,
+                205,
+                91,
+                206,
+                232
+            ]
+        },
+        {
+            "name": "CloseUserVolumeAccumulatorEvent",
+            "discriminator": [
+                146,
+                159,
+                189,
+                172,
+                146,
+                88,
+                56,
+                244
+            ]
+        },
+        {
+            "name": "CollectCoinCreatorFeeEvent",
+            "discriminator": [
+                232,
+                245,
+                194,
+                238,
+                234,
+                218,
+                58,
+                89
+            ]
+        },
+        {
+            "name": "CreateConfigEvent",
+            "discriminator": [
+                107,
+                52,
+                89,
+                129,
+                55,
+                226,
+                81,
+                22
+            ]
+        },
+        {
+            "name": "CreatePoolEvent",
+            "discriminator": [
+                177,
+                49,
+                12,
+                210,
+                160,
+                118,
+                167,
+                116
+            ]
+        },
+        {
+            "name": "DepositEvent",
+            "discriminator": [
+                120,
+                248,
+                61,
+                83,
+                31,
+                142,
+                107,
+                144
+            ]
+        },
+        {
+            "name": "DisableEvent",
+            "discriminator": [
+                107,
+                253,
+                193,
+                76,
+                228,
+                202,
+                27,
+                104
+            ]
+        },
+        {
+            "name": "ExtendAccountEvent",
+            "discriminator": [
+                97,
+                97,
+                215,
+                144,
+                93,
+                146,
+                22,
+                124
+            ]
+        },
+        {
+            "name": "InitUserVolumeAccumulatorEvent",
+            "discriminator": [
+                134,
+                36,
+                13,
+                72,
+                232,
+                101,
+                130,
+                216
+            ]
+        },
+        {
+            "name": "ReservedFeeRecipientsEvent",
+            "discriminator": [
+                43,
+                188,
+                250,
+                18,
+                221,
+                75,
+                187,
+                95
+            ]
+        },
+        {
+            "name": "SellEvent",
+            "discriminator": [
+                62,
+                47,
+                55,
+                10,
+                165,
+                3,
+                220,
+                42
+            ]
+        },
+        {
+            "name": "SetBondingCurveCoinCreatorEvent",
+            "discriminator": [
+                242,
+                231,
+                235,
+                102,
+                65,
+                99,
+                189,
+                211
+            ]
+        },
+        {
+            "name": "SetMetaplexCoinCreatorEvent",
+            "discriminator": [
+                150,
+                107,
+                199,
+                123,
+                124,
+                207,
+                102,
+                228
+            ]
+        },
+        {
+            "name": "SyncUserVolumeAccumulatorEvent",
+            "discriminator": [
+                197,
+                122,
+                167,
+                124,
+                116,
+                81,
+                91,
+                255
+            ]
+        },
+        {
+            "name": "UpdateAdminEvent",
+            "discriminator": [
+                225,
+                152,
+                171,
+                87,
+                246,
+                63,
+                66,
+                234
+            ]
+        },
+        {
+            "name": "UpdateFeeConfigEvent",
+            "discriminator": [
+                90,
+                23,
+                65,
+                35,
+                62,
+                244,
+                188,
+                208
+            ]
+        },
+        {
+            "name": "WithdrawEvent",
+            "discriminator": [
+                22,
+                9,
+                133,
+                26,
+                160,
+                44,
+                71,
+                192
+            ]
+        }
+    ],
+    "errors": [
+        {
+            "code": 0,
+            "name": "NotRentExempt",
+            "msg": "Lamport balance below rent-exempt threshold"
+        },
+        {
+            "code": 1,
+            "name": "InsufficientFunds",
+            "msg": "Insufficient funds"
+        },
+        {
+            "code": 2,
+            "name": "InvalidMint",
+            "msg": "Invalid Mint"
+        },
+        {
+            "code": 3,
+            "name": "MintMismatch",
+            "msg": "Account not associated with this Mint"
+        },
+        {
+            "code": 4,
+            "name": "OwnerMismatch",
+            "msg": "Owner does not match"
+        },
+        {
+            "code": 5,
+            "name": "FixedSupply",
+            "msg": "Fixed supply"
+        },
+        {
+            "code": 6,
+            "name": "AlreadyInUse",
+            "msg": "Already in use"
+        },
+        {
+            "code": 7,
+            "name": "InvalidNumberOfProvidedis_signers",
+            "msg": "Invalid number of provided is_signers"
+        },
+        {
+            "code": 8,
+            "name": "InvalidNumberOfRequiredis_signers",
+            "msg": "Invalid number of required is_signers"
+        },
+        {
+            "code": 9,
+            "name": "UninitializedState",
+            "msg": "State is unititialized"
+        },
+        {
+            "code": 10,
+            "name": "NativeNotSupported",
+            "msg": "Instruction does not support native tokens"
+        },
+        {
+            "code": 11,
+            "name": "NonNativeHasBalance",
+            "msg": "Non-native account can only be closed if its balance is zero"
+        },
+        {
+            "code": 12,
+            "name": "InvalidInstruction",
+            "msg": "Invalid instruction"
+        },
+        {
+            "code": 13,
+            "name": "InvalidState",
+            "msg": "State is invalid for requested operation"
+        },
+        {
+            "code": 14,
+            "name": "Overflow",
+            "msg": "Operation overflowed"
+        },
+        {
+            "code": 15,
+            "name": "AuthorityTypeNotSupported",
+            "msg": "Account does not support specified authority type"
+        },
+        {
+            "code": 16,
+            "name": "MintCannotFreeze",
+            "msg": "This token mint cannot freeze accounts"
+        },
+        {
+            "code": 17,
+            "name": "AccountFrozen",
+            "msg": "Account is frozen"
+        },
+        {
+            "code": 18,
+            "name": "MintDecimalsMismatch",
+            "msg": "The provided decimals value different from the Mint decimals"
+        },
+        {
+            "code": 19,
+            "name": "NonNativeNotSupported",
+            "msg": "Instruction does not support non-native tokens"
+        }
+    ],
+    "types": [
+        {
+            "name": "AccountState",
+            "type": {
+                "kind": "enum",
+                "variants": [
+                    {
+                        "name": "Uninitialized"
+                    },
+                    {
+                        "name": "Initialized"
+                    },
+                    {
+                        "name": "Frozen"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "AuthorityType",
+            "type": {
+                "kind": "enum",
+                "variants": [
+                    {
+                        "name": "MintTokens"
+                    },
+                    {
+                        "name": "FreezeAccount"
+                    },
+                    {
+                        "name": "AccountOwner"
+                    },
+                    {
+                        "name": "CloseAccount"
+                    }
+                ]
+            }
+        }
+    ],
+    "version": "3.3.0",
+    "name": "spl_token"
+}

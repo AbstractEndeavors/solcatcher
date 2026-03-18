@@ -1,0 +1,10 @@
+{"compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@db": ["src/db/index.js"] // Adjust the path as necessary
+    }
+  },
+"scripts": {
+  "start": "node dist/server/server.js",
+  "dev": "ts-node src/server/server.ts"
+}}

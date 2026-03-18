@@ -1,0 +1,119 @@
+import { getRepoServices } from "./../imports.js";
+export async function getLogDataCalls(app) {
+    // GET or POST /api/logdata/get-or-fetch
+    app.post("/logdata/get-or-fetch", async (req, res) => {
+        try {
+            const { id, signature, limit } = req.body;
+            const { logDataService } = await getRepoServices.services();
+            const result = await logDataService.fetchOrCreate({ id, signature, limit });
+            res.json(result);
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+    app.get("/logdata/get-or-fetch", async (req, res) => {
+        try {
+            const { id, signature, limit } = req.query;
+            const { logDataService } = await getRepoServices.services();
+            const result = await logDataService.fetchOrCreate({ id, signature, limit });
+            res.json(result);
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+    // GET or POST /api/logdata/fetch
+    app.post("/logdata/fetch", async (req, res) => {
+        try {
+            const { id, signature, limit, latest } = req.body;
+            const { logDataService } = await getRepoServices.services();
+            const result = await logDataService.fetch({ id, signature, limit, latest });
+            res.json(result);
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+    app.get("/logdata/fetch", async (req, res) => {
+        try {
+            const { id, signature, limit, latest } = req.query;
+            const { logDataService } = await getRepoServices.services();
+            const result = await logDataService.fetch({ id, signature, limit, latest });
+            res.json(result);
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+    // GET or POST /api/logdata/signature/:signature
+    app.post("/logdata/signature/:signature", async (req, res) => {
+        try {
+            const { signature } = req.params;
+            const { logDataService } = await getRepoServices.services();
+            const result = await logDataService.fetchBySignature(signature);
+            res.json(result);
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+    app.get("/logdata/signature/:signature", async (req, res) => {
+        try {
+            const { signature } = req.params;
+            const { logDataService } = await getRepoServices.services();
+            const result = await logDataService.fetchBySignature(signature);
+            res.json(result);
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+    // GET or POST /api/logdata/id/:id
+    app.post("/logdata/id/:id", async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { logDataService } = await getRepoServices.services();
+            const result = await logDataService.fetchById(id);
+            res.json(result);
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+    app.get("/logdata/id/:id", async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { logDataService } = await getRepoServices.services();
+            const result = await logDataService.fetchById(id);
+            res.json(result);
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+    // GET or POST /api/logdata/unsorted
+    app.post("/logdata/unsorted", async (req, res) => {
+        try {
+            const { limit, latest } = req.body;
+            const { logDataService } = await getRepoServices.services();
+            const result = await logDataService.fetchUnsorted({ limit, latest });
+            res.json(result);
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+    app.get("/logdata/unsorted", async (req, res) => {
+        try {
+            const { limit, latest } = req.query;
+            const { logDataService } = await getRepoServices.services();
+            const result = await logDataService.fetchUnsorted({ limit, latest });
+            res.json(result);
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+    return app;
+}

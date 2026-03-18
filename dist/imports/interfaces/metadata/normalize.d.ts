@@ -1,0 +1,20 @@
+export declare function normalizeChainMetadata(input: any): {
+    mint: any;
+    raw_payload: any;
+    metadata_pda: any;
+    update_authority: any;
+    name: any;
+    symbol: any;
+    uri: any;
+    seller_fee_basis_points: any;
+    is_mutable: any;
+    primary_sale_happened: any;
+    token_standard: any;
+    image: any;
+    description: any;
+    external_url: any;
+    onchain_metadata: any;
+    offchain_metadata: any;
+    spl_metadata: any;
+    has_metadata: boolean;
+};

@@ -1,0 +1,21 @@
+import { PublicKey, type SigLike } from './imports.js';
+import type { SignatureDicts, SignatureFilter } from './types.js';
+export declare function normalizeSignature(value: unknown): string | null;
+export declare function isSignature(value: unknown): value is SigLike;
+export declare function isSignatureArray(value: unknown): value is SigLike[];
+export declare const isSignatures: typeof isSignatureArray;
+export declare function getSignatureDicts(params: SignatureDicts): any;
+export declare function normalizeSigs(obj: any): any;
+export declare function shouldReturnSignature(signature: any, confirmationStatus?: string | null, err?: boolean | null): boolean;
+export declare function getFilteredSignatures(params: SignatureFilter): any;
+export declare function sortSignatures(obj: any, confirmationStatus?: any, err?: any, direction?: "asc" | "desc"): any;
+export declare function getAnySignature(obj: any, i?: number | null): any;
+export declare function getAnySignatureString(input: SigLike): SigLike;
+export declare function getBlockTimeFromTxn(txn: any): number;
+export declare function getErrorMessageFromTxn(txn: any): any;
+export declare function filterErrorless<T extends {
+    err?: any;
+}>(signatures: T[] | null | undefined): T[];
+export declare function oldestSignature(signatures: any[] | null | undefined, errorless?: boolean): string | null;
+export declare const METAPLEX_PROGRAM_ID: PublicKey;
+export declare function getMetadataPda(mint: PublicKey): PublicKey;

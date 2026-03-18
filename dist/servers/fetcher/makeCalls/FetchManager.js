@@ -1,0 +1,154 @@
+import { RpcCache, normalizeBase58, getPubkey, getSignature, getPubkeyString, inflightRegistry } from './imports/index.js';
+import { getFullTokenInfo } from './metaData/fetchMetaData.js';
+import { urlToString } from '@imports';
+import { RateLimiterService as RateLimiterDB } from '@repositories/ratelimiter/index.js';
+export function unwrapRpcResult(rpc) {
+    if (!rpc || typeof rpc !== "object") {
+        throw new Error("RPC response is not an object");
+    }
+    if (!("result" in rpc)) {
+        return rpc;
+    }
+    return rpc.result;
+}
+export class FetchManager {
+    limiter;
+    commitment;
+    cache;
+    constructor(limiter, commitment = "processed", cacheMaxSize = 10_000) {
+        this.limiter = limiter;
+        this.commitment = commitment;
+        this.cache = new RpcCache(cacheMaxSize);
+    }
+    async getBalance(input) {
+        const { account, commitment = this.commitment } = input;
+        if (!account)
+            return null;
+        const method = 'getBalance';
+        const params = [getPubkeyString(account), { commitment }];
+        return await this.fetchRpc({ method, params });
+    }
+    async getAccountInfo(input) {
+        const { account, commitment = this.commitment, encoding = "base64", offset = 0, length = 0, dataSlice } = input;
+        if (!account)
+            return null;
+        const method = "getAccountInfo";
+        const pubkeyStr = getPubkeyString(account);
+        const slice = dataSlice ?? { offset, length };
+        const params = [pubkeyStr, { commitment, encoding, ...slice }];
+        return await this.fetchRpc({ method, params });
+    }
+    async getAccountInfoJsonParsed(input) {
+        input.encoding = "jsonParsed";
+        return await this.getAccountInfo(input);
+    }
+    /**
+    * Fetches signatures for a given address.
+    *
+    * @param account - The address to fetch signatures for.
+    * @param until - Optional parameter to fetch signatures until a certain point.
+    * @param limit - The maximum number of signatures to fetch.
+    * @returns An array of signatures.
+    */
+    async getSignaturesForAddress(options, fallback = false) {
+        const limit = options.limit ?? 1000;
+        const until = options.until ?? null;
+        const commitment = options.commitment ?? null;
+        const method = "getSignaturesForAddress";
+        const pubkeyStr = getPubkeyString(options.account);
+        const params = [pubkeyStr, { limit, until, commitment }];
+        return await this.fetchRpc({ method, params }, fallback);
+    }
+    async getTransaction(input) {
+        const { signature, encoding = "base64", // ← FIX
+        commitment = this.commitment, maxSupportedTransactionVersion = 0 } = input;
+        if (!signature)
+            return null;
+        const method = "getTransaction";
+        const sig = getSignature(signature);
+        const params = [sig, { encoding, commitment, maxSupportedTransactionVersion }];
+        return await this.fetchRpc({ method, params });
+    }
+    async fetchMetaData(mint) {
+        const mintKey = getPubkeyString(mint);
+        const cacheKey = `metadata:${mintKey}`;
+        const cached = this.cache.get(cacheKey);
+        if (cached)
+            return cached;
+        const inflight = inflightRegistry.get(cacheKey);
+        if (inflight)
+            return inflight;
+        const promise = getFullTokenInfo(mintKey);
+        inflightRegistry.set(cacheKey, promise);
+        try {
+            const result = await promise;
+            this.cache.set(cacheKey, result, "fetchMetaData", "finalized");
+            return result;
+        }
+        finally {
+            inflightRegistry.delete(cacheKey);
+        }
+    }
+    // ─────────────────────────────────────────────
+    // CORE RPC (with caching)
+    // ─────────────────────────────────────────────
+    async fetchRpc(options, fallback = false) {
+        options.commitment = options.commitment || this.extractCommitment(options.params);
+        const cacheKey = RpcCache.buildKey(options.method, options.params);
+        // 1️⃣ Cache
+        const cached = this.cache.get(cacheKey);
+        if (cached !== null)
+            return cached;
+        // 2️⃣ Inflight dedupe
+        const inflight = inflightRegistry.get(cacheKey);
+        if (inflight)
+            return inflight;
+        // ✅ Validate rateLimiter before use
+        if (!this.limiter) {
+            throw new Error('FetchManager.fetchRpc: this.rateLimiter is undefined');
+        }
+        let promise = null;
+        // 3️⃣ Delegate execution to RateLimiterService
+        promise = this.limiter.fetchRpc(options, fallback);
+        inflightRegistry.set(cacheKey, promise);
+        try {
+            let result = await promise;
+            if (result && result !== null) {
+                this.cache.set(cacheKey, result, options.method, options.commitment);
+                // ✅ FIXED: Check if result has .json() before calling
+                if (typeof result.json === 'function') {
+                    result = await result.json();
+                }
+            }
+            return unwrapRpcResult(result);
+        }
+        finally {
+            inflightRegistry.delete(cacheKey);
+        }
+    }
+    extractCommitment(params) {
+        if (!params || !Array.isArray(params))
+            return this.commitment;
+        const last = params[params.length - 1];
+        if (last && typeof last === "object" && !Array.isArray(last)) {
+            const c = last.commitment;
+            if (c === "processed" || c === "confirmed" || c === "finalized") {
+                return c;
+            }
+        }
+        return this.commitment;
+    }
+    // ─────────────────────────────────────────────
+    // URL HELPERS
+    // ─────────────────────────────────────────────
+    async getUrl(method = null) {
+        let url = await this.limiter.getUrl(method ?? "default_method");
+        if (!url) {
+            url = await this.getFallbackUrl();
+        }
+        return url;
+    }
+    async getFallbackUrl() {
+        return urlToString(await this.limiter.fallbackUrl);
+    }
+}

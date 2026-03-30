@@ -1,24 +1,56 @@
 # solcatcher
 
-Real-time Solana transaction ingestion, decoding, and enrichment pipeline. Listens to program log streams, decodes Anchor events off the wire, classifies them, and persists structured trade/create data across a Postgres dual-database architecture (mega + rolling staging).
+A self-contained, real-time Solana transaction aggregation pipeline.
+
+Ingests raw log streams, decodes Anchor events, classifies and enriches them, and persists structured data across a dual-database architecture.
+
+Designed to operate without external API dependencies, while still supporting controlled integration of multiple RPC providers when useful.
+
+---
+
+## Why
+
+Most Solana data pipelines depend on third-party APIs for decoding, enrichment, or historical access.
+
+This system does not require that.
+
+It was built to:
+- remove dependency on external services
+- retain full control over ingestion and decoding
+- operate deterministically under load
+- remain runnable by anyone with sufficient infrastructure
+
+External APIs are treated as optional inputs, not structural requirements.
 
 ---
 
 ## What it does
 
-1. **Ingests** raw Solana log messages (via websocket subscription or RPC) — stores `logs_b64`, `slot`, `signature`, `program_id` in `logdata`
-2. **Parses** log lines into an invocation tree (`parseProgramLogs`) — each `Program data:` entry becomes a `log_payloads` row
-3. **Decodes** payload bytes against a registry of Anchor IDLs (`DECODER_REGISTRY`) — identifies `TradeEvent`, `CreateEvent`, `TradeEventExtended`, etc.
-4. **Classifies** decoded output into typed buckets — `DecodedTradeEvents | DecodedCreateEvents | DecodedUnknownEvent`
-5. **Routes** classified events through a RabbitMQ queue graph — each queue has explicit prefetch, retry strategy, and next-queue wiring
-6. **Enriches** pairs and metadata via parallel tracks — PDA derivation, onchain Metaplex fetch, offchain URI fetch, genesis signature discovery
-7. **Persists** to Postgres across six domain tables — `logdata`, `log_payloads`, `pairs`, `metadata`, `transactions`, `signatures`
-8. **Serves** structured data via a typed Express API (`/pairs`, `/metadata`, `/transactions`, `/logdata`, `/charts`)
+1. **Ingests** raw Solana logs (websocket / RPC) → stores base64 + metadata  
+2. **Parses** logs into structured invocation trees  
+3. **Decodes** payloads using Anchor IDL registry  
+4. **Classifies** events (trade, create, unknown)  
+5. **Routes** events through a queue-driven pipeline  
+6. **Enriches** with onchain + offchain metadata  
+7. **Persists** to Postgres across domain tables  
+8. **Serves** structured data via a typed API  
+
+---
+
+## Key Properties
+
+- **API-agnostic architecture** — runs fully standalone, but can integrate and orchestrate multiple external providers when beneficial  
+- **Queue-driven pipeline** — deterministic, observable flow with explicit stage separation  
+- **Typed end-to-end** — schemas enforced from ingestion through persistence  
+- **Dual-database model** — staging (writes) + mega (reads) for controlled state transitions  
+- **Decoder registry** — multi-IDL, version-aware event decoding with discriminator fallback  
+- **RPC orchestration layer** — in-memory URL selection, rate limiting, and circuit breaker handling  
 
 ---
 
 ## Architecture
 
+Queue-driven pipeline with explicit stage separation:
 ```
 Websocket / RPC
       │
@@ -44,6 +76,81 @@ enrichmentPipelineEntry → pairEnrich + metaDataEnrich
                          genesisLookup    onChainMetaDataEnrich
                          genesisEnrich    offChainMetaDataEnrich
 ```
+
+Each stage is isolated, observable, and explicitly routed.
+
+---
+
+## API Strategy
+
+The system is not bound to a single approach for data access.
+
+- Can run entirely on raw log ingestion + internal decoding  
+- Can integrate multiple RPC providers simultaneously  
+- Uses internal selection + rate limiting to distribute load  
+- Falls back automatically when endpoints degrade  
+
+External services improve performance when available, but are never required.
+
+---
+
+
+## Running
+
+```bash
+npm install
+npm run pipeline   # start ingestion + processing
+npm run api        # start API server
+
+Required:
+
+PostgreSQL (mega + staging)
+RabbitMQ
+Solana RPC endpoint(s)
+Notes
+Repositories never throw — all DB operations return structured results
+All pipeline stages operate on typed schemas
+Decoder registry supports versioned IDLs and fallback resolution
+Enrichment is idempotent and state-aware
+```
+---
+
+## 🧠 Why this version works
+
+- Keeps your **engineering tone**
+- Doesn’t introduce marketing language
+- Makes your **actual differentiator obvious**
+- Moves complexity **after comprehension**
+- Clearly communicates:
+  - independence
+  - flexibility
+  - control
+
+---
+
+## Failure Model
+
+The pipeline is designed around explicit failure containment and recovery.
+
+Failures are isolated at the queue level—each stage operates independently and does not propagate errors upstream.
+
+Handling strategy:
+
+- **Containment** — failures remain within a single queue stage  
+- **Retry** — applied selectively per queue type (DB, RPC, routing)  
+- **Degradation** — RPC layer dynamically routes around failing providers  
+- **Fallback** — alternate endpoints used when all primary paths fail  
+- **Persistence** — state is written incrementally to avoid loss  
+- **Resumption** — idempotent enrichment allows safe reprocessing  
+
+Repositories never throw—failures are returned as structured results and handled explicitly by the caller.
+
+The system favors forward progress over strict completion: partial failure is acceptable, and missing data can be filled in through later enrichment passes.
+
+Failures are expected, contained, and routed around—not treated as exceptional.
+
+---
+# Full Technical Breakdown
 
 ### Queue tier summary
 

@@ -191,8 +191,6 @@ decoding/src/idls/
 └── solana-defi-main/             ← git submodule, not imported by the pipeline
 ```
 
-`solana-defi-main` is a third-party reference submodule left in place — it informed the design of the decoder and enrichment logic but is not imported or executed by any path in the TypeScript pipeline.
-
 The Rust crates under `idls/PumpFun/Rust/`, `idls/Raydium/Rust/`, etc. are standalone binaries (each has `Cargo.toml`, `src/main.rs`, Jito proto definitions). They are reference implementations, not called by the TypeScript pipeline at runtime. The pipeline uses only the JSON IDLs under `idls/new/`.
 
 ### Protocols covered

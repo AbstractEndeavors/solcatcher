@@ -113,18 +113,6 @@ All pipeline stages operate on typed schemas
 Decoder registry supports versioned IDLs and fallback resolution
 Enrichment is idempotent and state-aware
 ```
----
-
-## 🧠 Why this version works
-
-- Keeps your **engineering tone**
-- Doesn’t introduce marketing language
-- Makes your **actual differentiator obvious**
-- Moves complexity **after comprehension**
-- Clearly communicates:
-  - independence
-  - flexibility
-  - control
 
 ---
 

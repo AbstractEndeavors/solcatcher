@@ -40,35 +40,45 @@ The system is designed to run indefinitely under load, with explicit handling fo
 ## Architecture Overview
 
 Queue-driven pipeline with strict stage separation:
+```mermaid
+flowchart TD
+    A[Solana Websocket / RPC] --> B[Log Intake Queue]
 
+    B --> C[Log Parser + Decoder]
+    C --> D[Classification Engine]
+
+    D --> E[Routing Queue]
+
+    E --> F1[Trade Event Worker]
+    E --> F2[Create Event Worker]
+
+    F1 --> G1[Transaction Insert]
+    F2 --> G2[Genesis Insert]
+
+    G1 --> H[Staging DB]
+    G2 --> H
+
+    H --> I[Enrichment Queue]
+    I --> J1[On-chain Enrichment]
+    I --> J2[Off-chain Enrichment]
+    I --> J3[Pair Enrichment]
+
+    J1 --> K[Final DB]
+    J2 --> K
+    J3 --> K
+
+    K --> L[API Server]
+
+    M[Rate Limiter + RPC Orchestrator] --> A
+    M --> J1
+    N[Decoder Registry] --> C
 ```
-[ Ingestion ]
-Websocket / RPC
-        ↓
-[ Intake Queue ]
-        ↓
-[ Parsing + Classification ]
-        ↓
-[ Routing Queue ]
-        ↓
-[ Event Workers (trade / create) ]
-        ↓
-[ Persistence Layer ]
-        ↓
-[ Enrichment Pipeline ]
-        ↓
-[ Final State (Queryable DB) ]
-```
 
-Each stage:
-
-- operates independently
-- is observable
-- can fail without affecting upstream stages
+Each stage operates independently, is observable, and can fail without affecting upstream stages.
 
 ---
 
-## Failure Model (Core Design Principle)
+## Failure Model
 
 Failures are expected and designed for.
 
@@ -85,15 +95,15 @@ The pipeline prioritizes **forward progress** over strict completion, allowing m
 
 This system mirrors common cloud-native patterns:
 
-| Solcatcher                | AWS Equivalent                |
-| ------------------------- | ----------------------------- |
-| RabbitMQ queues           | SQS                           |
-| Worker handlers           | Lambda / ECS                  |
-| Express API               | API Gateway + Lambda          |
-| PostgreSQL (mega/staging) | RDS                           |
-| RPC orchestration         | API Gateway + circuit breaker |
-| Rate limiter registry     | DynamoDB                      |
-| Websocket ingestion       | Kinesis / API Gateway WS      |
+| Solcatcher                        | AWS Equivalent                |
+| --------------------------------- | ----------------------------- |
+| RabbitMQ queues                   | SQS                           |
+| Worker handlers                   | Lambda / ECS                  |
+| Express API                       | API Gateway + Lambda          |
+| PostgreSQL (staging / final)      | RDS                           |
+| RPC orchestration                 | API Gateway + circuit breaker |
+| Rate limiter registry             | DynamoDB                      |
+| Websocket ingestion               | Kinesis / API Gateway WS      |
 
 The system is implemented directly on self-managed infrastructure, providing full control over execution, failure handling, and performance characteristics.
 
@@ -103,7 +113,7 @@ The system is implemented directly on self-managed infrastructure, providing ful
 
 - **Queue-driven pipeline** — explicit stage separation and flow control
 - **Typed end-to-end** — schemas enforced from ingestion to persistence
-- **Dual-database model** — staging (writes) + mega (reads)
+- **Dual-database model** — staging (writes) + final (reads)
 - **Decoder registry** — version-aware, multi-IDL event decoding
 - **RPC orchestration layer** — rate limiting + circuit breaker + fallback routing
 - **API-agnostic** — operates without external dependencies, integrates when beneficial
